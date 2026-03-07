@@ -328,8 +328,12 @@ fn build(sysroot: Option<&str>) -> io::Result<()> {
             }
         }
     } else {
-        // tune the compiler for the host arhitecture
-        configure.arg("--extra-cflags=-march=native -mtune=native");
+        // tune the compiler for the host architecture
+        // MSVC doesn't support -march/-mtune; these are GCC/Clang flags
+        let compiler = cc::Build::new().get_compiler();
+        if !compiler.is_like_msvc() {
+            configure.arg("--extra-cflags=-march=native -mtune=native");
+        }
     }
 
     if env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("windows") {
