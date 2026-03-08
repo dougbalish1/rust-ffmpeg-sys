@@ -336,6 +336,9 @@ fn build(sysroot: Option<&str>) -> io::Result<()> {
         }
     }
 
+    println!("cargo:warning=ABOUT TO CHECK TARGET_OS");
+    println!("cargo:warning=TARGET_OS={:?}", env::var("CARGO_CFG_TARGET_OS"));
+
     if env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("windows") {
         // essential librareis on windowsw
         println!("cargo:rustc-link-lib=dylib=ole32");
